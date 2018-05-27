@@ -181,3 +181,24 @@ DEBUG=express:* node index.js
 ```
 
 `*` means all the steps, see only routes replace it with `router` 
+
+# Performance
+
+## 使用 gzip 压缩
+
+```js
+
+var compression = require('compression');
+var express = require('express');
+var app = express();
+app.use(compression());
+```
+
+通过 Gzip 压缩，有助于显著降低响应主体的大小，从而提高 Web 应用程序的速度。可使用[压缩](https://www.npmjs.com/package/compression)中间件进行 Express 应用程序中的 gzip 压缩
+
+## 将 NODE_ENV 设置为“production”
+
+```bash
+export NODE_ENV=production
+```
+
