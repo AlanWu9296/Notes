@@ -48,3 +48,34 @@ Adding password for user admin
 # nginx.conf配置文件
 
 Nginx配置文件主要分成四部分：**main（全局设置）**、**server（主机设置）**、**upstream（上游服务器设置，主要为反向代理、负载均衡相关配置）**和 **location（URL匹配特定位置后的设置）**，每部分包含若干个指令。main部分设置的指令将影响其它所有部分的设置；server部分的指令主要用于指定虚拟主机域名、IP和端口；upstream的指令用于设置一系列的后端服务器，设置反向代理及后端服务器的负载均衡；location部分用于匹配网页位置（比如，根目录“/”,“/images”,等等）。他们之间的关系式：server继承main，location继承server；upstream既不会继承指令也不会被继承。它有自己的特殊指令，不需要在其他地方的应用。
+
+# nginx 缓存配置
+
+```nginx
+http{  
+    ......  
+    proxy_cache_path /data/nginx/tmp-test levels=1:2 keys_zone=tmp-test:100m inactive=7d max_size=1000g;  
+}
+```
+
+ proxy_cache_path 缓存文件路径
+
+ levels 设置缓存文件目录层次；levels=1:2 表示两级目录
+
+ keys_zone 设置缓存名字和共享内存大小
+
+ inactive 在指定时间内没人访问则被删除
+
+max_size 最大缓存空间，如果缓存空间满，默认覆盖掉缓存时间最长的资源
+
+```nginx
+  proxy_cache tmp-test;  
+  proxy_cache_valid  200 206 304 301 302 10d;  
+  proxy_cache_key $uri; 
+```
+
+ Proxy_cache  tmp-test  使用名为tmp-test的对应缓存配置
+
+ proxy_cache_valid  200 206 304 301 302 10d; 对httpcode为200…的缓存10天
+
+ proxy_cache_key  $uri  定义缓存唯一key,通过唯一key来进行hash存取
