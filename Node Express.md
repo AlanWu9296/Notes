@@ -514,3 +514,54 @@ app.get('/', function (req, res) {
   }
 });
 ```
+
+## [Multer](https://github.com/expressjs/multer/blob/master/doc/README-zh-cn.md)
+
+Multer 是一个 node.js 中间件，用于处理 `multipart/form-data` 类型的表单数据，它主要用于上传文件。**注意**: Multer 不会处理任何非 `multipart/form-data` 类型的表单数据。
+
+```js
+var express = require('express')
+var multer  = require('multer')
+var upload = multer({ dest: 'uploads/' })
+
+var app = express()
+
+// 'avatar'是在html表单中相应的input对应的name后同
+app.post('/profile', upload.single('avatar'), function (req, res, next) {
+  // req.file 是 `avatar` 文件的信息
+  // req.body 将具有文本域数据，如果存在的话
+})
+
+app.post('/photos/upload', upload.array('photos', 12), function (req, res, next) {
+  // req.files 是 `photos` 文件数组的信息
+  // req.body 将具有文本域数据，如果存在的话
+})
+
+var cpUpload = upload.fields([{ name: 'avatar', maxCount: 1 }, { name: 'gallery', maxCount: 8 }])
+app.post('/cool-profile', cpUpload, function (req, res, next) {
+  // req.files 是一个对象 (String -> Array) 键是文件名，值是文件数组
+  //
+  // 例如：
+  //  req.files['avatar'][0] -> File
+  //  req.files['gallery'] -> Array
+  //
+  // req.body 将具有文本域数据，如果存在的话
+})
+```
+
+#### `DiskStorage`
+
+磁盘存储引擎可以让你控制文件的存储。
+
+```js
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, '/tmp/my-uploads')
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.fieldname + '-' + Date.now())
+  }
+})
+
+var upload = multer({ storage: storage })
+```
