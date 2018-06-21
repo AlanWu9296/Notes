@@ -144,3 +144,30 @@
 - **Relative positioning** allows you to modify an  element's position on the page, moving it relative to its position in  normal flow — including making it overlap other elements on the page.  This is useful for minor layout tweaks and design pinpointing.
 - **Absolute positioning** moves an element completely  out of the page's normal layout flow, like it is sitting on its own  separate layer. From there, you can fix it in a position relative to the  edges of the page's `<html>` element (or its nearest  positioned ancestor element). This is useful for creating complex layout  effects such as tabbed boxes where different content panels sit on top  of one another and are shown and hidden as desired, or information  panels that sit off screen by default, but can be made to slide on  screen using a control button.
 - **Fixed positioning** is very similar to absolute  positioning, except that it fixes an element relative to the browser  viewport, not another element. This is useful for creating effects such  as a persistent navigation menu that always stays in the same place on  the screen as the rest of the content scrolls.
+
+# Centralize
+
+## horizontal
+
+```cs
+text-align: center;
+在块级父容器中让行内元素居中
+这种方法可以让 inline/inline-block/inline-table/inline/flex 等类型的元素实现居中
+
+
+div{
+	width = 600px;
+    margin: 0 auto;
+}
+```
+
+## vertical
+
+```cs
+div{
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+```
+

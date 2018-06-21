@@ -101,4 +101,19 @@ The two major features of AJAX allow you to do the following:
    2. `if (httpRequest.status === 200)` check the request response whether it successfully connect to the server
    3. `httpRequest.responseText` to parse for response usually in JSON format thus it should be used with `JSON.parse()`
 
-    
+   ```
+   0: 请求未初始化
+   1: 服务器连接已建立
+   2: 请求已接收
+   3: 请求处理中
+   4: 请求已完成，且响应已就绪
+   ```
+
+    ```js
+   var xhr = new XMLHttpRequest()
+   xhr.open('GET',url)
+   xhr.onload = function(){}
+   xhr.send()
+    ```
+
+   
