@@ -1,3 +1,91 @@
+# Promise & Async
+
+```js
+var promise = new Promise(function(resolve, reject) {
+  if (/*success condition */){
+    resolve(value); // like return the value
+  } else {
+    reject(error);
+  }
+});
+
+promise.then(function(value) {
+  // success
+}, function(value) {
+  // failure
+});
+
+//eg
+function timeout(ms) {
+  return new Promise((resolve) => {
+      //after ms return 
+    setTimeout(resolve, ms);
+  });
+}
+// after the promise resolved do
+timeout(100).then(() => {
+  console.log('done');
+});
+```
+
+```js
+// .then is a chain type which also returns a promise
+
+getJSON("/post/1.json").then(function(post) {
+  return getJSON(post.commentURL);
+}).then(function(comments) {
+  // process comments
+});
+```
+
+```js
+//use .catch to deal with the errors
+getJSON("/post/1.json").then(function(post) {
+  return getJSON(post.commentURL);
+}).then(function(comments) {
+  // some code
+}).catch(function(error) {
+  // this catch will catch the two then's errors
+});
+```
+
+Promise.all / Promise.race
+
+```js
+//all promises resolved then pass the result array back;any promise rejected will return rejected
+var promises = [2, 3, 5, 7, 11, 13].map(function(id){
+  return getJSON("/post/" + id + ".json");
+});
+
+Promise.all(promises).then(function(posts) {
+  // ...  
+}).catch(function(reason){
+  // ...
+});
+
+// any of the promise resolved then turn back the promise's resolve
+var p = Promise.race([p1,p2,p3]);
+```
+
+async
+
+```js
+function timeout(ms) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
+
+//async indicate that there is Promises in this function
+// when executing the the await, the function pause and go out until the promise is solved whether resolved or rejected and then jump back to exutate the clause after await
+async function asyncValue(value) {
+  await timeout(50);
+  return value;
+}
+```
+
+
+
 # Object Oriented Programming
 
 ## Constructor Function and Own Property
@@ -105,6 +193,49 @@ motionModule.glideMixin(duck);
 motionModule.glideMixin(boat);
 duck.glide();
 ```
+
+## ES6 Class 
+
+```js
+function Point(x,y){
+    this.x = x;
+    this.y = y;
+}
+
+Point.prototype.toString = function () {
+    return '('+this.x+', '+this.y+')';
+}
+
+// equals to 
+class Point {
+
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+  }
+
+  toString() {
+    return '('+this.x+', '+this.y+')';
+  }
+
+}
+
+//inheritance
+class ColorPoint extends Point {
+
+  constructor(x, y, color) {
+    super(x, y); // equals to super.constructor(x, y)
+    this.color = color;
+  }
+
+  toString() {
+    return this.color+' '+super();
+  }
+
+}
+```
+
+
 
 # Functional Programming
 
@@ -585,3 +716,47 @@ mapping f is equivalent to aping a functor of f
 ```
 
 `An *applicative functor* is a pointed functor with an `ap` method`
+
+```js
+// Http.get :: String -> Task Error HTML
+
+var renderPage = curry(function(destinations, events) { /* render page */  });
+
+Task.of(renderPage).ap(Http.get('/destinations')).ap(Http.get('/events'))
+// Task("<div>some page with dest and events</div>")
+
+// in this example, it could be said as kind of async function due to the curring
+// compared to monad, monad must execut from left to right
+```
+
+```js
+var liftA2 = curry(function(f, functor1, functor2) {
+  return functor1.map(f).ap(functor2);
+});
+
+var liftA3 = curry(function(f, functor1, functor2, functor3) {
+  return functor1.map(f).ap(functor2).ap(functor3);
+});
+
+// checkEmail :: User -> Either String Email
+// checkName :: User -> Either String String
+
+//  createUser :: Email -> String -> IO User
+var createUser = curry(function(email, name) { /* creating... */ });
+
+Either.of(createUser).ap(checkEmail(user)).ap(checkName(user));
+// Left("invalid email")
+
+liftA2(createUser, checkEmail(user), checkName(user));
+// Left("invalid email")
+
+liftA2(add, Maybe.of(2), Maybe.of(3));
+// Maybe(5)
+
+liftA2(renderPage, Http.get('/destinations'), Http.get('/events'))
+// Task("<div>some page with dest and events</div>")
+
+liftA3(signIn, getVal('#email'), getVal('#password'), IO.of(false));
+// IO({id: 3, email: "gg@allin.com"})
+```
+

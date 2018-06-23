@@ -10,9 +10,7 @@
 # Variables
 
 1. $<name> : <value>;
-2. `#{$<element_name>}` call back the element name of scss into css
-
-
+2. `#{$<name>}` call back the element name of scss into css as a string
 
 # Inheritance
 
@@ -22,6 +20,35 @@
    - `%<name>{}` to create a place holder of the properties
    - `@extend %<name>` to inheritate the values in the place holder
 
+```scss
+.panel{
+  background-color: red;
+  height: 70px;
+  border: 2px solid green;
+}
+
+.big-panel{
+  @extend .panel;
+  width: 150px;
+  font-size: 2em;
+}
+```
+
+
+
+# Partial & Import
+
+`Partials` in Sass are separate files  that hold segments of CSS code. These are imported and used in other  Sass files. This is a great way to group similar code into a module to  keep it organized.
+
+Names for `partials` start with the underscore (`_`) character, which tells Sass it is a small segment of CSS and not to convert it into a CSS file. Also, Sass files end with the `.scss` file extension. To bring the code in the `partial` into another Sass file, use the `@import` directive.
+
+```scss
+//if all your mixins are saved in a partial named "_mixins.scss", and they are needed in the "main.scss" file
+// In the main.scss file
+// Note that the underscore is not needed in the import statement - Sass understands it is a partial
+@import 'mixins'
+```
+
 
 
 # Mixins
@@ -29,14 +56,18 @@
 1. `@mixin <name>($<arg>){@content}`
 2. `@include <name>(){}`
 
+```scss
+@mixin box-shadow($x, $y, $blur, $c){
+  -webkit-box-shadow: $x, $y, $blur, $c;
+  -moz-box-shadow: $x, $y, $blur, $c;
+  -ms-box-shadow: $x, $y, $blur, $c;
+  box-shadow: $x, $y, $blur, $c;
+}
 
-
-# Import
-
-1. `@import '<name.format>'`
-2. naming the file name starting with `_` means the file is *partial* thus will not be converted
-
-
+div {
+  @include box-shadow(0px, 0px, 4px, #fff);
+}
+```
 
 # List Function 
 
@@ -48,8 +79,6 @@
 6. `append(<list>,<value>,<seperator>)`
 7. `index(<list>,<value>)`
 8. `zip(<list...>)` 
-
-
 
 # Maps
 
@@ -83,6 +112,23 @@
 2. `@else if<condition>{}`
 3. `@else{}`
 
+```scss
+@mixin text-effect($val) {
+  @if $val == danger {
+    color: red;
+  }
+  @else if $val == alert {
+    color: yellow;
+  }
+  @else if $val == success {
+    color: green;
+  }
+  @else {
+    color: black;
+  }
+}
+```
+
 
 
 # Loops
@@ -90,6 +136,32 @@
 1. `@for $i from <start int> through <end int>{h#{$i}}`
 2. `@each<variable> in <list>{}` or  `@each <variable1>, <variable2> in <map>{}`
 3. `@while <condition>{}`
+
+```scss
+@for $i from 1 through 12 {
+  .col-#{$i} { width: 100%/12 * $i; }
+}
+```
+
+```scss
+@each $color in blue, red, green {
+  .#{$color}-text {color: $color;}
+}
+
+
+$colors: (color1: blue, color2: red, color3: green);
+@each $key, $color in $colors {
+  .#{$color}-text {color: $color;}
+}
+```
+
+```scss
+$x: 1;
+@while $x < 13 {
+  .col-#{$x} { width: 100%/12 * $x;}
+  $x: $x + 1;
+}
+```
 
 
 
