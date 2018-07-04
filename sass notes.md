@@ -69,6 +69,41 @@ div {
 }
 ```
 
+# Color Functions
+
+## rgb function
+
+-  rgb($red,$green,$blue)**：根据**红**、**绿**、**蓝**三个值创建一个颜色；
+-  rgba($red,$green,$blue,$alpha)**：根据**红**、**绿**、**蓝**和**透明度**值创建一个颜色；
+-  red($color)**：从一个颜色中获取其中**红色**值；
+-  green($color)**：从一个颜色中获取其中**绿色**值；
+-  blue($color)**：从一个颜色中获取其中**蓝色**值；
+-  mix($color-1,$color-2,[$weight])**：把两种颜色混合在一起。
+
+## HSL Function 
+
+- hsl($hue,$saturation,$lightness)：通过色相（hue）、饱和度(saturation)和亮度（lightness）的值创建一个颜色；
+- hsla($hue,$saturation,$lightness,$alpha)：通过色相（hue）、饱和度(saturation)、亮度（lightness）和透明（alpha）的值创建一个颜色；
+- hue($color)：从一个颜色中获取色相（hue）值；
+
+- saturation($color)：从一个颜色中获取饱和度（saturation）值；
+- lightness($color)：从一个颜色中获取亮度（lightness）值；
+- adjust-hue($color,$degrees)：通过改变一个颜色的色相值，创建一个新的颜色；
+- lighten($color,$amount)：通过改变颜色的亮度值，让颜色变亮，创建一个新的颜色；
+- darken($color,$amount)：通过改变颜色的亮度值，让颜色变暗，创建一个新的颜色；
+- saturate($color,$amount)：通过改变颜色的饱和度值，让颜色更饱和，从而创建一个新的颜色
+- desaturate($color,$amount)：通过改变颜色的饱和度值，让颜色更少的饱和，从而创建出一个新的颜色；
+- grayscale($color)：将一个颜色变成灰色，相当于desaturate($color,100%);
+- complement($color)：返回一个补充色，相当于adjust-hue($color,180deg);
+- invert($color)：反回一个反相色，红、绿、蓝色值倒过来，而透明度不变。
+
+##  Opacity Function
+
+- alpha($color) /opacity($color)：获取颜色透明度值；
+- rgba($color, $alpha)**：改变颜色的透明度值；**
+- opacify($color, $amount) / fade-in($color, $amount)**：使颜色更不透明；**
+- transparentize($color, $amount) / fade-out($color, $amount)：使颜色更加透明。
+
 # List Function 
 
 1. `length(<list>)`
@@ -168,8 +203,6 @@ $x: 1;
 # Function Directives
 
 1. `@function <func name>(<arg...>){@return <result>}`
-
-
 
 # Source Map
 

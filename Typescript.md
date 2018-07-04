@@ -206,3 +206,85 @@ square.color = "blue";
 square.sideLength = 10;
 square.penWidth = 5.0;
 ```
+# Class
+
+## Public, private, protected and readonly modifiers
+
+1. In TypeScript, each member is `public` by default.
+2. When a member is marked `private`, it cannot be accessed from outside of its containing class
+3. The `protected` modifier acts much like the `private` modifier with the exception that members declared `protected` can also be accessed within deriving classes
+4. Readonly properties must be initialized at their declaration or in the constructor.
+
+## Abstract Classes
+
+Abstract classes are base classes from which other classes may be derived. They may not be instantiated directly. Unlike an interface, an abstract class may contain implementation details for its members
+
+Methods within an abstract class that are marked as abstract do not  contain an implementation and must be implemented in derived classes. Abstract methods share a similar syntax to interface methods. Both define the signature of a method without including a method body. However, abstract methods must include the `abstract` keyword and may optionally include access modifiers.
+
+```ts
+abstract class Department {
+
+    constructor(public name: string) {
+    }
+
+    printName(): void {
+        console.log("Department name: " + this.name);
+    }
+
+    abstract printMeeting(): void; // must be implemented in derived classes
+}
+
+class AccountingDepartment extends Department {
+
+    constructor() {
+        super("Accounting and Auditing"); // constructors in derived classes must call super()
+    }
+
+    printMeeting(): void {
+        console.log("The Accounting Department meets each Monday at 10am.");
+    }
+
+    generateReports(): void {
+        console.log("Generating accounting reports...");
+    }
+}
+```
+
+# Functions
+
+## Optional and Default Parameters
+
+```ts
+// optional parameters with ? which can be not offered
+function buildName(firstName: string, lastName?: string) {
+    if (lastName)
+        return firstName + " " + lastName;
+    else
+        return firstName;
+}
+// default parameter can be assigned directly
+function buildName(firstName: string, lastName = "Smith") {
+    return firstName + " " + lastName;
+}
+```
+
+## Rest Parameters
+
+```ts
+// with ...
+function buildName(firstName: string, ...restOfName: string[]) {
+    return firstName + " " + restOfName.join(" ");
+}
+```
+
+# Generics
+
+In languages like C# and Java, one of the main tools in the toolbox for creating reusable components is *generics*, that is, being able to create a component that can work over a variety of types rather than a single one. This allows users to consume these components and use their own types
+
+ we will use a *type variable*, a special kind of variable that works on types rather than values.
+
+```ts
+function identity<T>(arg: T): T {
+    return arg;
+}
+```
